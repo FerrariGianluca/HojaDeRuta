@@ -25,7 +25,7 @@ if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function(position) {
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
-        updateMap(lat, lon, "Ubicación actual");
+        updateMap(lat, lon, "Lugar de partida");
     }, function() {
         // No se pudo obtener la ubicación actual
         updateMap(latPredeterminado, lonPredeterminado, "GCBA");

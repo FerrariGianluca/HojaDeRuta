@@ -9,15 +9,17 @@
 </head>
 <body>
     <div class="point-container">
-        <label>Latitud
-            <input type="text" id="lat" class="point-input">
-        </label>
-        <label>Longitud
-            <input type="text" id="lon" class="point-input">
-        </label>
-        <label>Lugar
-            <input type="text" id="des" class="point-input">
-        </label>
+        <div class="label-container">
+            <label>Latitud
+                <input type="text" id="lat" class="point-input">
+            </label>
+            <label>Longitud
+                <input type="text" id="lon" class="point-input">
+            </label>
+            <label>Lugar
+                <input type="text" id="des" class="point-input">
+            </label>
+        </div>
         <button type="button" class="point-btn" onclick="addPoint()">Agregar</button>
         <div id="error-message"></div>
     </div>
