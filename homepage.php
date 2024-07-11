@@ -23,6 +23,12 @@
         <button type="button" class="point-btn" onclick="addPoint()">Agregar</button>
         <div id="error-message"></div>
     </div>
+    <div class="points-list-container">
+        <h2>Lista de ubicaciones</h2>
+        <ul id="points-list" class="points-list">
+
+        </ul>
+    </div>
     <div class="map-container">
         <div id="map"></div>
     </div>

@@ -48,7 +48,7 @@ function updateMap(lat, lon, name) {
         marker.bindPopup(getPopupContent(lat, lon));
 
         fitMarkers(); // Ajusta los límites después de agregar el marcador
-        
+        renderPointsList();
     } else {
         console.error("Coordenadas inválidas: ", lat, lon);
     }
@@ -88,6 +88,21 @@ function isValidCoordinate(lat, lon) {
     return true;
 }
 
+function renderPointsList(){
+    var pointsList = document.getElementById('points-list');
+
+    // Vaciar la lista actual
+    pointsList.innerHTML = '';
+
+    // Crear elementos de lista para cada punto
+    points.forEach(point => {
+        var listItem = document.createElement('li');
+        listItem.className = 'point-item';
+        listItem.textContent = point.name;
+        pointsList.appendChild(listItem);
+    });
+}
+
 function addPoint() {
     var lat = document.getElementById('lat').value;
     var lon = document.getElementById('lon').value;
@@ -97,13 +112,22 @@ function addPoint() {
         lat = parseFloat(lat);
         lon = parseFloat(lon);
 
+    // Verifica si el punto ya existe
+    var existingPoint = points.find(p => p.lat === lat && p.lon === lon);
+    if (existingPoint) {
+        // Actualiza el nombre del punto existente si es necesario
+        existingPoint.name = name;
+        // Actualiza el contenido del popup para el marcador existente
+        markers[`${lat},${lon}`].bindPopup(getPopupContent(lat, lon));
+    }else{
         points.push({ lat: lat, lon: lon, name: name });
 
         var marker = L.marker([lat, lon]).addTo(map);
         markers[`${lat},${lon}`] = marker;
         marker.bindPopup(getPopupContent(lat, lon));
-
-        fitMarkers(); // Llama a fitMarkers después de agregar el marcador
+    }
+    fitMarkers(); // Llama a fitMarkers después de agregar el marcador
+    renderPointsList();
     }
 }
 
