@@ -1,0 +1,74 @@
+/* Asegúrate de que el mapa tenga una altura y un ancho adecuados */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.map-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#map {
+    height: 250px; 
+    width: 25%;  
+    border: 1px solid #080707;
+}
+
+.custom-popup{
+    max-width: 200px;
+    text-align: center;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+    background-color: #fff; /* Fondo del popup */
+    border-radius: 6px; /* Esquinas redondeadas */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); /* Sombra */
+    padding: 10px; /* Espaciado interno */
+}
+
+/* Estilo para el título dentro del popup */
+.custom-popup .leaflet-popup-content {
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilo para el botón dentro del popup */
+.custom-popup button {
+    background-color: #007bff; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    padding: 8px 16px; /* Espaciado interno del botón */
+    border-radius: 4px; /* Esquinas redondeadas */
+    cursor: pointer; /* Cursor de mano al pasar sobre el botón */
+    margin-top: 5px; /* Margen superior */
+}
+
+.custom-popup .leaflet-popup-content button:hover {
+    background-color: #0056b3;
+}
+.btn-exit-container{
+    position: absolute;
+    bottom: 20px; /* Ajusta la distancia desde la parte inferior */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
+}
+.btn-exit {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-exit:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,112 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.form .index {
+    margin: 10px;
+}
+
+.form input[type="text"],
+.form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.form-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño del botón */
+}
+
+.form-btn-back {
+    background-color: #f44336; /* Color de fondo para el botón de volver */
+    margin-top: 20px; /* Espaciado superior del botón de volver */
+}
+
+.form-btn-back:hover{
+    background-color: #d32f2f; /* Cambia el color de fondo al pasar el ratón */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño del botón */
+}
+
+.form-info {
+    margin-top: 10px;
+    color: red;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/*------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------*/
+
+.form-index {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+/* Puedes ajustar el espaciado entre los botones aquí */
+.form-btn-index:first-of-type {
+    margin-bottom: 20px; /* Espaciado inferior del primer botón */
+}
+
+.form-btn-index {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.form-btn-index:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño del botón */
+}
