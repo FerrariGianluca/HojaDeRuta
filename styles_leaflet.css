@@ -6,14 +6,16 @@ body {
 }
 
 .map-container{
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 20px;
 }
 
 #map {
-    height: 250px; 
-    width: 25%;  
+    height: 300px; 
+    width: 100%;  
     border: 1px solid #080707;
 }
 
@@ -99,4 +101,22 @@ body {
 }
 #error-message{
     height: 10px;
+}
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Alinea elementos al inicio (arriba) */
+    padding: 20px;
+}
+.points-list-container{
+    flex: 1;
+    max-width: 400px;
+    border: 1px solid #000;
+    padding: 10px;
+}
+.points-list-container h2{
+    text-align: center;
+}
+.point-item{
+    list-style-type: none;
 }
