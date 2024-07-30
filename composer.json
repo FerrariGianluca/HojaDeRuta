@@ -1,0 +1,18 @@
+{
+    "name": "prueba/excel",
+    "description": "prueba para planillas excel",
+    "autoload": {
+        "psr-4": {
+            "Prueba\\Excel\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gianluca Tomas Ferrari",
+            "email": "g.ferrari@buenosaires.gob.ar"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^2.2"
+    }
+}
