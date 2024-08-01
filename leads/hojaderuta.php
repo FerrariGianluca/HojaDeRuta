@@ -7,8 +7,11 @@ $leads = [
     'titulo_general' => 'HOJA DE RUTA',
     'ministerio' => 'MINISTERIO: Ministerio de Hacienda y Finanzas',
     'subsecretaria' => 'UO: (SSGRH) SS Gestión de Recursos Humanos',
-    'imagen' => 'url',
-    'id' => 'hruta'
+    'imagen' => [
+        'url' => 'images/logo-ba.png',
+        'description' => 'ba-ciudad'
+    ],
+    'tipo' => 'HRUTA'
 ]
 
 ?>
