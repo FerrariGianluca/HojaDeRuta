@@ -28,59 +28,64 @@ function makeExcel($datos, $nombre = null, $leads = [], $headers = []) {
     // Obtener la hoja activa
     $sheet = $spreadsheet->getActiveSheet();
 
-    // Llamar a la función makeLead para configurar el encabezado
-    //makeLead($sheet, $leads);
-
     // Verifica que el array sea tridimensional
-    $isThreeDimensional = isset($datos[0][0]) && is_array($datos[0][0]);
-    
+    $isThreeDimensional = isset($datos['datos'][0][0]) && is_array($datos['datos'][0][0]);
+
     $title = strtolower($leads['titulo_general']);
     $title = ucfirst($title);
 
     // Si es tridimensional, crea una nueva hoja para cada grupo
     if ($isThreeDimensional) {
     // Itera a través de cada grupo (o hoja si solo es bidimensional)
-        foreach ($datos as $groupIndex => $group) {
+        foreach ($datos['datos'] as $groupIndex => $group) {
             $sheet = $spreadsheet->createSheet();
-            makeLead($sheet, $leads, $groupIndex+1);
+            makeLead($datos, $sheet, $leads, $groupIndex+1);
             $sheet->setTitle($title . ' ' . ($groupIndex + 1));
             $sheet->setShowGridlines(false);
             // Aplanar los datos de tres dimensiones a una hoja de cálculo
-            $startRow = LEAD_HEIGHT_CELLS + 1;
+            $startRow = LEAD_HEIGHT_CELLS+1;
+            $num=1;
             foreach ($group as $rowIndex => $row) {
-                $column = 'A';
                 $sheet->getStyle($startRow.':'.$startRow)->getFont()->setSize(10);
                 $sheet->getStyle($startRow.':'.$startRow)->getFont()->setName('Arial');
                 $sheet->getStyle($startRow.':'.$startRow)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
                 $sheet->getStyle($startRow.':'.$startRow)->getBorders()->getBottom()->setColor(new Color('FF000000'));
                 $sheet->getRowDimension($startRow)->setRowHeight(32);
+                $sheet->setCellValue('A' . $startRow, $num);
+                $column = 'B';
+                $num++;
                 foreach ($row as $cellIndex => $value) {
                     $sheet->setCellValue($column . $startRow, $value);
                     $column++;
                 }
+
+
                 $startRow++;
             }
             $highestColumn = $sheet->getHighestColumn();
             $highestRow = $sheet->getHighestRow();
             $highestCell = $highestColumn . $highestRow;
-            $sheet->getStyle('A' . LEAD_HEIGHT_CELLS + 1 . ':' . $highestCell)->getFont()->setSize(10);
-            $sheet->getStyle('A' . LEAD_HEIGHT_CELLS + 1 . ':' .$highestCell)->getFont()->setName('Arial');
+            $sheet->getStyle('A' . LEAD_HEIGHT_CELLS+1 . ':' . $highestCell)->getFont()->setSize(10);
+            $sheet->getStyle('A' . LEAD_HEIGHT_CELLS+1 . ':' .$highestCell)->getFont()->setName('Arial');
         }       
     } else {  
         // Datos bidimensionales
         $sheet = $spreadsheet->getActiveSheet();
-        makeLead($sheet, $leads, 1);
+        makeLead($datos, $sheet, $leads, 1);
         $sheet->setTitle($title);
         $sheet->setShowGridlines(false);
-        $startRow = LEAD_HEIGHT_CELLS + 1;
-        foreach ($datos as $rowIndex => $row) {
+        $startRow = LEAD_HEIGHT_CELLS+1;
+        $num=1;
+        foreach ($datos['datos'] as $rowIndex => $row) {
             // Convertir datos bidimensionales a una hoja de cálculo
-            $column = 'A';
             $sheet->getStyle($startRow.':'.$startRow)->getFont()->setSize(10);
             $sheet->getStyle($startRow.':'.$startRow)->getFont()->setName('Arial');
             $sheet->getStyle($startRow.':'.$startRow)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
             $sheet->getStyle($startRow.':'.$startRow)->getBorders()->getBottom()->setColor(new Color('FF000000'));            
             $sheet->getRowDimension($startRow)->setRowHeight(32);
+            $sheet->setCellValue('A' . $startRow, $num);
+            $column = 'B';
+            $num++;
             foreach ($row as $cellIndex => $value) {
                 $sheet->setCellValue($column . $startRow, $value);
                 $column++;
@@ -90,8 +95,8 @@ function makeExcel($datos, $nombre = null, $leads = [], $headers = []) {
         $highestColumn = $sheet->getHighestColumn();
         $highestRow = $sheet->getHighestRow();
         $highestCell = $highestColumn . $highestRow;
-        $sheet->getStyle('A' . LEAD_HEIGHT_CELLS + 1 . ':' . $highestCell)->getFont()->setSize(10);
-        $sheet->getStyle('A' . LEAD_HEIGHT_CELLS + 1 . ':' .$highestCell)->getFont()->setName('Arial');
+        $sheet->getStyle('A' . LEAD_HEIGHT_CELLS+1 . ':' . $highestCell)->getFont()->setSize(10);
+        $sheet->getStyle('A' . LEAD_HEIGHT_CELLS+1 . ':' .$highestCell)->getFont()->setName('Arial');
     }
 
     // Elimina la hoja en blanco predeterminada si se creó más de una hoja
@@ -136,7 +141,7 @@ function cmToPixels($cm) {
     return $cm * 37.8;
 }
 
-function makeLead($sheet, $lead, $id){
+function makeLead($datos, $sheet, $lead, $id){
     # Lead
 
     # Nueva instancia de Drawing para el logo
@@ -181,9 +186,17 @@ function makeLead($sheet, $lead, $id){
     $sheet->mergeCells("J7:K8");
 
     # Títulos de columnas
-    $sheet->setCellValue("A11", "Nombre");
-    $sheet->setCellValue("B11", "Apellido");
-    $sheet->setCellValue("C11", "Edad");
+    $column=$datos['encabezado'];
+    $columnIndex='A';
+    $rowIndex=11;
+    foreach($column as $title){
+       $sheet->setCellValue($columnIndex.$rowIndex, $title);
+       $columnIndex++;
+    };
+
+    // $sheet->setCellValue("A11", "Nombre");
+    // $sheet->setCellValue("B11", "Apellido");
+    // $sheet->setCellValue("C11", "Edad");
     
     # Estilos
 
