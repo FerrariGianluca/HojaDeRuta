@@ -2,6 +2,7 @@ function exit() {
     window.location.href = 'index.php';
 }
 
+
 // Inicializa el mapa con valores predeterminados
 var latPredeterminado = -34.628409927244306; // Latitud predeterminada
 var lonPredeterminado = -58.36988252397463; // Longitud predeterminada
@@ -20,47 +21,59 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Obtiene la ubicación actual del usuario
-if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
-        updateMap(lat, lon, "Lugar de partida");
-    }, function() {
-        // No se pudo obtener la ubicación actual
-        updateMap(latPredeterminado, lonPredeterminado, "GCBA");
-    });
-} else {
-    // La geolocalización no es compatible con este navegador
-    updateMap(latPredeterminado, lonPredeterminado, "GCBA");
-}
+// // Obtiene la ubicación actual del usuario
+// if ("geolocation" in navigator) {
+//     navigator.geolocation.getCurrentPosition(function(position) {
+//         var lat = position.coords.latitude;
+//         var lon = position.coords.longitude;
+//         updateMap(lat, lon, "Lugar de partida");
+//     }, function() {
+//         // No se pudo obtener la ubicación actual
+//         updateMap(latPredeterminado, lonPredeterminado, "GCBA");
+//     });
+// } else {
+//     // La geolocalización no es compatible con este navegador
+//     updateMap(latPredeterminado, lonPredeterminado, "GCBA");
+// }
 
-function updateMap(lat, lon, name) {
-    // Asegúrate de que las coordenadas sean válidas
-    if (lat && lon) {
-        points.push({ lat: lat, lon: lon, name: name });
+// function updateMap(lat, lon, name) {
+//     // Asegúrate de que las coordenadas sean válidas
+//     if (isValidCoordinate(lat, lon)) {
+//         points.push({ lat: lat, lon: lon, name: name });
 
-        // Establece la vista del mapa en las coordenadas proporcionadas
-        map.setView([lat, lon], defaultZoomLevel);
+//         // Establece la vista del mapa en las coordenadas proporcionadas
+//         map.setView([lat, lon], defaultZoomLevel);
 
-        var marker = L.marker([lat, lon]).addTo(map);
-        markers[`${lat},${lon}`] = marker;
-        marker.bindPopup(getPopupContent(lat, lon));
+//         var marker = L.marker([lat, lon]).addTo(map);
+//         markers[`${lat},${lon}`] = marker;
+//         marker.bindPopup(getPopupContent(lat, lon));
 
-        fitMarkers(); // Ajusta los límites después de agregar el marcador
-        renderPointsList();
-    } else {
-        console.error("Coordenadas inválidas: ", lat, lon);
+//         fitMarkers(); // Ajusta los límites después de agregar el marcador
+//         renderPointsList();
+//     }/* else {
+//         showError("Coordenadas inválidas. Lat: " + lat + ". Lon: " + lon + ".");
+//     }*/
+// }
+
+async function fetchCoordinates() {
+    try {
+        const response = await fetch('./csvjson.json');
+        const data = await response.json();
+        //const coordinates = data;
+
+        addRoute(data);
+    } catch (error) {
+      console.error('Error al cargar el JSON:', error);
     }
 }
 
-function showError(message) {
-    document.getElementById('error-message').textContent = message;
-}
+// function showError(message) {
+//     document.getElementById('error-message').textContent = message;
+// }
 
-function clearError() {
-    document.getElementById('error-message').textContent = '';
-}
+// function clearError() {
+//     document.getElementById('error-message').textContent = '';
+// }
 
 function isValidCoordinate(lat, lon) {
     lat = parseFloat(lat);
@@ -79,55 +92,61 @@ function isValidCoordinate(lat, lon) {
     const latDecimals = (lat.toString().split('.')[1] || '').length;
     const lonDecimals = (lon.toString().split('.')[1] || '').length;
 
-    if (latDecimals > 14 || lonDecimals > 14) {
+    if (latDecimals > 15 || lonDecimals > 15) {
         showError("Demasiados decimales en las coordenadas.");
         return false;
     }
 
-    clearError();
+    //clearError();
     return true;
 }
 
-function renderPointsList(){
-    var pointsList = document.getElementById('points-list');
+// function createPointsList(){
+//     data.forEach(() => {
 
-    // Vaciar la lista actual
-    pointsList.innerHTML = '';
+//     });
+//     var pointsList = document.getElementById('points-list');
 
-    // Crear elementos de lista para cada punto
-    points.forEach(point => {
-        var listItem = document.createElement('li');
-        listItem.className = 'point-item';
-        listItem.textContent = point.name;
-        pointsList.appendChild(listItem);
-    });
+//     // Vaciar la lista actual
+//     pointsList.innerHTML = '';
+
+//     // Crear elementos de lista para cada punto
+//     points.forEach(point => {
+//         var listItem = document.createElement('li');
+//         listItem.className = 'point-item';
+//         listItem.textContent = point.name;
+//         pointsList.appendChild(listItem);
+//     });
+// }
+
+function addRoute(data){
+    const filteredData = data.slice(0, 12);
+    filteredData.forEach(coord => {
+        addPoint(coord.LATITUD, coord.LONGITUD, coord.CLAVE);
+    })
 }
 
-function addPoint() {
-    var lat = document.getElementById('lat').value;
-    var lon = document.getElementById('lon').value;
-    var name = document.getElementById('des').value;
-
+function addPoint(lat, lon, name) {
     if (isValidCoordinate(lat, lon) && name.trim() !== "") {
         lat = parseFloat(lat);
         lon = parseFloat(lon);
-
-    // Verifica si el punto ya existe
-    var existingPoint = points.find(p => p.lat === lat && p.lon === lon);
-    if (existingPoint) {
-        // Actualiza el nombre del punto existente si es necesario
-        existingPoint.name = name;
-        // Actualiza el contenido del popup para el marcador existente
-        markers[`${lat},${lon}`].bindPopup(getPopupContent(lat, lon));
-    }else{
-        points.push({ lat: lat, lon: lon, name: name });
-
-        var marker = L.marker([lat, lon]).addTo(map);
-        markers[`${lat},${lon}`] = marker;
-        marker.bindPopup(getPopupContent(lat, lon));
-    }
-    fitMarkers(); // Llama a fitMarkers después de agregar el marcador
-    renderPointsList();
+    
+        // Verifica si el punto ya existe
+        var existingPoint = points.find(p => p.lat === lat && p.lon === lon);
+        if (existingPoint) {
+            // Actualiza el nombre del punto existente si es necesario
+            existingPoint.name = name;
+            // Actualiza el contenido del popup para el marcador existente
+            markers[`${lat},${lon}`].bindPopup(getPopupContent(lat, lon));
+        }else{
+            points.push({ lat: lat, lon: lon, name: name });
+        
+            var marker = L.marker([lat, lon]).addTo(map);
+            markers[`${lat},${lon}`] = marker;
+            marker.bindPopup(getPopupContent(lat, lon));
+        }
+        fitMarkers(); // Llama a fitMarkers después de agregar el marcador
+        // renderPointsList();
     }
 }
 
@@ -181,6 +200,7 @@ function zoomToMarker(lat, lon) {
     }
 }
 
+// Perímetro rectangular dinámico
 function fitMarkers() {
     var bounds = L.latLngBounds();
     var hasPoints = false;
@@ -207,8 +227,39 @@ function fitMarkers() {
     }
 }
 
+// // Perímetro circular dinámico
+// function fitMarkers() {
+//     var bounds = L.latLngBounds();
+//     var hasPoints = false;
+
+//     for (var key in markers) {
+//         if (markers.hasOwnProperty(key)) {
+//             var marker = markers[key];
+//             bounds.extend(marker.getLatLng());
+//             hasPoints = true;
+//         }
+//     }
+
+//     if (hasPoints) {
+//         map.fitBounds(bounds);
+//         originalBounds = bounds;
+
+//         // Calcula el radio del círculo
+//         var center = bounds.getCenter();
+//         var radius = bounds.getNorthEast().distanceTo(bounds.getSouthWest()) / 2;
+
+//         if (areaLayer) {
+//             map.removeLayer(areaLayer);
+//         }
+//         areaLayer = L.circle(center, {color: "#ff7800", weight: 1, radius: radius}).addTo(map);
+//     } else {
+//         // Si no hay puntos, establece la vista en la ubicación predeterminada
+//         map.setView([latPredeterminado, lonPredeterminado], defaultZoomLevel);
+//     }
+// }
+
 // Inicializa el mapa con los marcadores existentes
-points.forEach((point) => {
+points.forEach(point => {
     var marker = L.marker([point.lat, point.lon]).addTo(map);
     
     markers[`${point.lat},${point.lon}`] = marker;
@@ -217,3 +268,4 @@ points.forEach((point) => {
 
 // Ajusta los límites después de inicializar el mapa
 fitMarkers();
+fetchCoordinates();

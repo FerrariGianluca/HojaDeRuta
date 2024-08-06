@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="styles_leaflet.css" />
 </head>
 <body>
-    <div class="point-container">
+    <!--div class="point-container">
         <div class="label-container">
             <label>Latitud
                 <input type="text" id="lat" class="point-input">
@@ -22,7 +22,7 @@
         </div>
         <button type="button" class="point-btn" onclick="addPoint()">Agregar</button>
         <div id="error-message"></div>
-    </div>
+    </div-->
     <div class="main-container">
         <div class="points-list-container">
             <h2>Lista de ubicaciones</h2>
@@ -32,9 +32,9 @@
             <div id="map"></div>
         </div>
     </div>
-    <div class="btn-exit-container">
+    <!--div class="btn-exit-container">
         <button class="btn-exit" onclick="exit()">Salir</button>
-    </div>
+    </div-->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="leaflet.js"></script>
 </body>
