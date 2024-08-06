@@ -1,6 +1,6 @@
-function exit() {
-    window.location.href = 'index.php';
-}
+// function exit() {
+//     window.location.href = 'index.php';
+// }
 
 
 // Inicializa el mapa con valores predeterminados
@@ -20,6 +20,36 @@ var map = L.map('map').setView([latPredeterminado, lonPredeterminado], defaultZo
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+async function loadBarrios() {
+    try {
+        const response = await fetch('./barrios.json');
+        const geojsonData = await response.json();
+
+        // Añadir el GeoJSON al mapa
+        L.geoJSON(geojsonData, {
+            style: function (feature) {
+                return {
+                    color: "#FF0000", // Color del borde del polígono
+                    weight: 2, // Grosor del borde
+                    opacity: 0.7, // Opacidad del borde
+                    fillColor: "#FF0000", // Color de relleno del polígono
+                    fillOpacity: 0.3 // Opacidad del relleno
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                if (feature.properties && feature.properties.Nombre) {
+                    layer.bindPopup(feature.properties.Nombre);
+                }
+            }
+        }).addTo(map);
+    } catch (error) {
+        console.error('Error al cargar el archivo GeoJSON:', error);
+    }
+}
+
+// Llama a la función para cargar los polígonos
+loadBarrios();
 
 // // Obtiene la ubicación actual del usuario
 // if ("geolocation" in navigator) {
@@ -120,7 +150,7 @@ function isValidCoordinate(lat, lon) {
 // }
 
 function addRoute(data){
-    const filteredData = data.slice(0, 12);
+    const filteredData = data.slice(0, 10);
     filteredData.forEach(coord => {
         addPoint(coord.LATITUD, coord.LONGITUD, coord.CLAVE);
     })
@@ -267,5 +297,5 @@ points.forEach(point => {
 });
 
 // Ajusta los límites después de inicializar el mapa
-fitMarkers();
-fetchCoordinates();
+//fitMarkers();
+// fetchCoordinates();
