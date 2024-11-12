@@ -199,71 +199,28 @@ function makeLead($datos, $sheet, $lead, $id){
     // $sheet->setCellValue("C11", "Edad");
     
     # Estilos
-
-    $borderTopMedium = [
-        'borders' => [
-                'top' => [
-                    'borderStyle' => Border::BORDER_MEDIUM,
-                    'color' => ['argb' => 'FF000000'],
-                ],
-        ]
-    ];
-    $borderBottomMedium = [
-        'borders' => [
-            'bottom' => [
-                'borderStyle' => Border::BORDER_MEDIUM,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
-    $borderLeftMedium = [
-        'borders' => [
-            'left' => [
-                'borderStyle' => Border::BORDER_MEDIUM,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
-    $borderRightMedium = [
-        'borders' => [
-            'right' => [
-                'borderStyle' => Border::BORDER_MEDIUM,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
-    $borderTopThin = [
-        'borders' => [
-            'top' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
-    $borderBottomThin = [
-        'borders' => [
-            'bottom' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
-    $borderLeftThin = [
-        'borders' => [
-            'left' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
-    $borderRightThin = [
-        'borders' => [
-            'right' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => ['argb' => 'FF000000'],
-            ],
-        ]
-    ];
+    if(!function_exists('createBorderStyle')){
+        function createBorderStyle($position,$style,$color){
+            return [
+                'borders' => [
+                        $position => [
+                            'borderStyle' => $style,
+                            'color' => ['argb' => $color],
+                        ],
+                ]
+            ];    
+        };
+    };
+    if (!defined('MEDIUM')) define('MEDIUM', Border::BORDER_MEDIUM);
+    if (!defined('THIN')) define('THIN', Border::BORDER_THIN);
+    $borderTopMedium=createBorderStyle('top',MEDIUM,'FF000000');
+    $borderBottomMedium=createBorderStyle('bottom',MEDIUM,'FF000000');
+    $borderLeftMedium=createBorderStyle('left',MEDIUM,'FF000000');
+    $borderRightMedium=createBorderStyle('right',MEDIUM,'FF000000');
+    $borderTopThin=createBorderStyle('top',THIN,'FF000000');
+    $borderBottomThin=createBorderStyle('bottom',THIN,'FF000000');
+    $borderLeftThin=createBorderStyle('left',THIN,'FF000000');
+    $borderRightThin=createBorderStyle('right',THIN,'FF000000');
 
     $sheet->getStyle('11:11')->applyFromArray($borderTopThin);
 
